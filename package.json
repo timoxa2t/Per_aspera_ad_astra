@@ -1,0 +1,22 @@
+{
+  "name": "per_aspera_ad_astra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viperhit/Per_aspera_ad_astra.git"
+  },
+  "author": "viperhit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viperhit/Per_aspera_ad_astra/issues"
+  },
+  "homepage": "https://github.com/viperhit/Per_aspera_ad_astra#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
