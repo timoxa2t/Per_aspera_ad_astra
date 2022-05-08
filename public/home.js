@@ -1,15 +1,19 @@
 'use strict'
 
 
-let tasks = fetch('./getTasks')
+let tasks = []
+
+fetch('./getTasks')
     .then(res => res.json())
     .then(res => {
         if(!res) return
+        tasks = [...res]
         res.map(item => {
             const {text, creation_date, completed} = item
             createElement(text, creation_date, completed)   
-    })
-})
+        })
+    }
+)
 
 let myNodelist = document.getElementsByTagName("LI");
 let i;
@@ -49,6 +53,19 @@ function newElement() {
         alert("You must type something!");
     }
     else{
+        let newTask = {
+            text: inputValue,
+            creation_date: new Date(),
+            checked: false
+        }
+        tasks.push(newTask)
+        fetch('./addTask', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(newTask) 
+        })
         createElement(inputValue)
     }
     document.getElementById('myInput').value = ''
