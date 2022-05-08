@@ -1,4 +1,8 @@
 // Create a "close" button and append it to each list item
+import {getTasks} from './data_service.js'
+
+
+let tasks = getTasks()
 let myNodelist = document.getElementsByTagName("LI");
 let i;
 for (i = 0; i < myNodelist.length; i++) {
@@ -33,6 +37,7 @@ function newElement() {
     let li = document.createElement('li');
     let inputValue = document.getElementById('myInput').value;
     let t = document.createTextNode(inputValue);
+
     li.appendChild(t);
     if (inputValue === '') {
         alert("You must type something!");

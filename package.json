@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/viperhit/Per_aspera_ad_astra#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "firebase": "^9.6.10",
+    "pg": "^8.7.3"
   }
 }
