@@ -1,8 +1,16 @@
-// Create a "close" button and append it to each list item
-import {getTasks} from './data_service.js'
+'use strict'
 
 
-let tasks = getTasks()
+let tasks = fetch('./getTasks')
+    .then(res => res.json())
+    .then(res => {
+        if(!res) return
+        res.map(item => {
+            const {text, creation_date, completed} = item
+            createElement(text, creation_date, completed)   
+    })
+})
+
 let myNodelist = document.getElementsByTagName("LI");
 let i;
 for (i = 0; i < myNodelist.length; i++) {
@@ -34,18 +42,25 @@ list.addEventListener('click', function (ev){
 
 // Create a new list item when clicking on the "Add" button
 function newElement() {
-    let li = document.createElement('li');
+    
     let inputValue = document.getElementById('myInput').value;
+   
+    if (inputValue === '') {
+        alert("You must type something!");
+    }
+    else{
+        createElement(inputValue)
+    }
+    document.getElementById('myInput').value = ''
+}
+
+function createElement(inputValue, date = Date(), checked = false){
+    let li = document.createElement('li');
     let t = document.createTextNode(inputValue);
 
     li.appendChild(t);
-    if (inputValue === '') {
-        alert("You must type something!");
-    } else {
-        document.getElementById("myUL").appendChild(li);
-    }
-    document.getElementById('myInput').value = ''
-
+    checked && li.classList.toggle('checked');
+    document.getElementById("myUL").appendChild(li);
     let span = document.createElement("SPAN");
     let txt = document.createTextNode("\u00D7");
     span.className = 'close';

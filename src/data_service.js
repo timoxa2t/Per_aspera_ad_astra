@@ -1,15 +1,18 @@
-import digitalOceanConfig from '../config/digital_ocean_config.json'
+const digitalOceanConfig = require('../config/digital_ocean_config.json')
 
-const { Pool} = require('pg')
+const { Client} = require('pg')
+const res = require('express/lib/response')
 
-const pool = new Pool(digitalOceanConfig)
+const client = new Client(digitalOceanConfig)
+client.connect()
 
-const getTasks = () => { 
-    const tasksRef = ref(database, 'tasks');
-    onValue(tasksRef, (snapshot) => {
-        console.log(snapshot.val());
-      
-    });
+
+module.exports.getTasks = (callback) => { 
+    client.query(
+        'SELECT id, text, creation_date, completed FROM Tasks', 
+        (err, sqlres) => {
+            if(err) console.log(err) 
+            callback(sqlres.rows)
+    })
+
 }
-
-export {getTasks}
