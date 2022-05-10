@@ -9,8 +9,8 @@ fetch('./getTasks')
         if(!res) return
         tasks = [...res]
         res.map(item => {
-            const {text, creation_date, completed} = item
-            createElement(text, creation_date, completed)   
+            const {id, text, creation_date, completed} = item
+            createElement(id, text, creation_date, completed)   
         })
     }
 )
@@ -30,10 +30,13 @@ let close = document.getElementsByClassName("close");
 let j;
 for (j = 0; j < close.length; j++) {
     close[j].onclick = function () {
+        
         let div = this.parentElement;
         div.style.display = 'none'
     }
 }
+
+
 
 // Add a "checked" symbol when clicking on a list item
 let list = document.querySelector('ul');
@@ -41,6 +44,18 @@ let list = document.querySelector('ul');
 list.addEventListener('click', function (ev){
     if (ev.target.tagName === 'LI') {
         ev.target.classList.toggle('checked');
+        const task = tasks.find(item => item.id == ev.target.id)
+
+        if(task){
+            task.completed = ev.target.classList.value === "checked"
+            fetch('./changeTask', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(task) 
+            })
+        }
     }
 }, false);
 
@@ -66,16 +81,20 @@ function newElement() {
             },
             body: JSON.stringify(newTask) 
         })
-        createElement(inputValue)
+        let nextId = tasks.reduce((max, item) => {
+            return item > max ? item: max
+        }, 1)
+        createElement(nextId, inputValue)
     }
     document.getElementById('myInput').value = ''
 }
 
-function createElement(inputValue, date = Date(), checked = false){
+function createElement(id, inputValue, date = Date(), checked = false){
     let li = document.createElement('li');
     let t = document.createTextNode(inputValue);
 
     li.appendChild(t);
+    li.id = id 
     checked && li.classList.toggle('checked');
     document.getElementById("myUL").appendChild(li);
     let span = document.createElement("SPAN");
@@ -86,6 +105,19 @@ function createElement(inputValue, date = Date(), checked = false){
 
     for (i = 0; i < close.length; i++) {
         close[i].onclick = function () {
+            const task = tasks.find(item => item.id == this.parentElement.id)
+
+            if(task){
+                
+                fetch('./deleteTask', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(task) 
+                })
+                tasks.splice(tasks.indexOf(task), 1)
+            }
             let div = this.parentElement;
             div.style.display = 'none';
         }

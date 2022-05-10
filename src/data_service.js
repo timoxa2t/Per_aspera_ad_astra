@@ -38,3 +38,35 @@ module.exports.addTask = (task, callback) => {
         }
     )
 }
+
+module.exports.changeTask = (task, callback) => {
+    const values = [task.id, task.text, task.completed]
+    client.query(
+        'UPDATE Tasks SET text = $2, completed = $3 WHERE id = $1', 
+        values, 
+        (err, res) => {
+            if(err){
+                console.log(err)
+                callback(err)
+            }else{
+                callback(res)
+            }
+        }
+    )
+}
+
+module.exports.deleteTask = (task, callback) => {
+    const values = [task.id]
+    client.query(
+        'DELETE FROM Tasks WHERE id = $1', 
+        values, 
+        (err, res) => {
+            if(err){
+                console.log(err)
+                callback(err)
+            }else{
+                callback(res)
+            }
+        }
+    )
+}
